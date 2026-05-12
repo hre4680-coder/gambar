@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dashboard - Arena Lomba Gambar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0B1120, #0F172A);
+            color: #E2E8F0;
+            padding: 24px 20px;
+            min-height: 100vh;
+        }
+        .app-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        /* header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            padding: 12px 28px;
+            border-radius: 80px;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        .logo h2 {
+            background: linear-gradient(120deg, #FDE68A, #F59E0B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.7rem;
+        }
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #1E293B;
+            padding: 6px 20px;
+            border-radius: 40px;
+        }
+        .username {
+            font-weight: 600;
+            color: #FFD966;
+        }
+        .logout-btn {
+            background: none;
+            border: 1px solid #EF4444;
+            color: #FECACA;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .logout-btn:hover {
+            background: #EF4444;
+            color: white;
+        }
+        /* grid card */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.2s;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
+        }
+        .card:hover {
+            border-color: #F59E0B80;
+            transform: translateY(-4px);
+        }
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        label {
+            font-weight: 500;
+            display: block;
+            margin: 14px 0 6px;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        input, select {
+            width: 100%;
+            background: #0F172A;
+            border: 1px solid #334155;
+            padding: 12px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        input:focus, select:focus {
+            border-color: #F59E0B;
+        }
+        button {
+            background: linear-gradient(100deg, #F59E0B, #D97706);
+            width: 100%;
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #0F172A;
+        }
+        button:active {
+            transform: scale(0.97);
+        }
+        .code-result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .game-code {
+            background: #00000066;
+            font-family: monospace;
+            font-size: 2rem;
+            letter-spacing: 6px;
+            padding: 10px;
+            border-radius: 60px;
+            background: #1E293B;
+            color: #FBBF24;
+            margin: 10px 0;
+        }
+        .success-tag {
+            background: #22C55E20;
+            color: #86EFAC;
+            padding: 6px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .error-tag {
+            background: #EF444420;
+            color: #FCA5A5;
+        }
+        .join-link {
+            display: inline-block;
+            background: #3B82F6;
+            padding: 8px 25px;
+            border-radius: 60px;
+            color: white;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .info-text {
+            font-size: 0.75rem;
+            color: #94A3B8;
+            margin-top: 12px;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+        @media (max-width: 700px) {
+            body { padding: 16px; }
+            .card { padding: 20px; }
+            .header { flex-direction: column; align-items: stretch; text-align: center; }
+            .user-greeting { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <div class="logo">
+            <h2>🎨 LOMBA GAMBAR</h2>
+        </div>
+        <div class="user-greeting">
+            <span>👋 Halo, <span id="displayUsername" class="username">pemain</span></span>
+            <button id="logoutBtnHeader" class="logout-btn">Keluar</button>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <!-- CREATE GAME CARD -->
+        <div class="card">
+            <h3>🚀 Buat Game Baru</h3>
+            <label>🎨 Tema lomba</label>
+            <input type="text" id="themeInput" placeholder="Misal: Pemandangan, Fantasi, Bebas" value="Bebas">
+
+            <label>⏱️ Durasi menggambar (detik)</label>
+            <input type="number" id="drawDur" value="90" min="30" max="300">
+
+            <label>⭐ Durasi menilai (detik)</label>
+            <input type="number" id="ratingDur" value="60" min="30" max="180">
+
+            <button id="createGameBtn">✨ Buat Game Privat + Kode</button>
+            <div id="createResult" class="code-result"></div>
+        </div>
+
+        <!-- JOIN GAME CARD -->
+        <div class="card">
+            <h3>🔑 Ikut Lomba</h3>
+            <label>📟 Kode Game (6 digit)</label>
+            <input type="text" id="joinCode" placeholder="misal: 7XC3F9" maxlength="6" style="text-transform:uppercase">
+            <button id="joinGameBtn">➡️ Masuk ke Arena</button>
+            <div id="joinResult" class="code-result"></div>
+            <div class="info-text">* Kode didapat dari pembuat game (host)</div>
+        </div>
+    </div>
+
+    <!-- (Bisa tambahkan riwayat game nanti, untuk kesan lebih hidup) -->
+    <footer>
+        🌟 Setiap gambar dinilai oleh peserta lain • Pemenang 1-3 ditampilkan beserta karyanya
+    </footer>
+</div>
+
+<script>
+    // ambil data user dari /api/me
+    async function loadUser() {
+        try {
+            const res = await fetch('/api/me');
+            if (res.ok) {
+                const user = await res.json();
+                document.getElementById('displayUsername').innerText = user.username;
+            } else {
+                window.location.href = '/';
+            }
+        } catch(e) {
+            window.location.href = '/';
+        }
+    }
+
+    loadUser();
+
+    // Buat game
+    const createBtn = document.getElementById('createGameBtn');
+    const createResultDiv = document.getElementById('createResult');
+    const joinBtn = document.getElementById('joinGameBtn');
+    const joinResultDiv = document.getElementById('joinResult');
+
+    createBtn.addEventListener('click', async () => {
+        const theme = document.getElementById('themeInput').value.trim() || 'Bebas';
+        const drawingDuration = parseInt(document.getElementById('drawDur').value);
+        const ratingDuration = parseInt(document.getElementById('ratingDur').value);
+        createResultDiv.innerHTML = '<span class="success-tag">⏳ Membuat game...</span>';
+        try {
+            const res = await fetch('/create-game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ theme, drawingDuration, ratingDuration })
+            });
+            const data = await res.json();
+            if (data.success) {
+                createResultDiv.innerHTML = `
+                    <div class="success-tag" style="background:#22C55E30;">✅ Game siap!</div>
+                    <div class="game-code">🎮 ${data.code}</div>
+                    <a href="/game/${data.gameId}" class="join-link">🎨 Masuk ke Game (Host)</a>
+                    <div class="info-text">Bagikan kode <strong>${data.code}</strong> ke teman</div>
+                `;
+            } else {
+                createResultDiv.innerHTML = `<div class="error-tag">❌ ${data.message || 'Gagal membuat game'}</div>`;
+            }
+        } catch(err) {
+            createResultDiv.innerHTML = `<div class="error-tag">❌ Error server, coba lagi</div>`;
+        }
+    });
+
+    // Join game
+    joinBtn.addEventListener('click', async () => {
+        const code = document.getElementById('joinCode').value.trim().toUpperCase();
+        if (!code) {
+            joinResultDiv.innerHTML = '<div class="error-tag">Masukkan kode game!</div>';
+            return;
+        }
+        joinResultDiv.innerHTML = '<span class="success-tag">🔍 Mencari game...</span>';
+        try {
+            const res = await fetch('/join-game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+            const data = await res.json();
+            if (data.success) {
+                window.location.href = `/game/${data.gameId}`;
+            } else {
+                joinResultDiv.innerHTML = `<div class="error-tag">❌ ${data.message || 'Kode tidak valid'}</div>`;
+            }
+        } catch(err) {
+            joinResultDiv.innerHTML = '<div class="error-tag">❌ Tidak bisa join, cek koneksi</div>';
+        }
+    });
+
+    // logout
+    const logoutBtn = document.getElementById('logoutBtnHeader');
+    logoutBtn.addEventListener('click', async () => {
+        await fetch('/logout');
+        window.location.href = '/';
+    });
+</script>
+</body>
+</html>
