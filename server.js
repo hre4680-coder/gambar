@@ -8,7 +8,12 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -26,7 +31,6 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Buat tabel jika belum ada
 async function initDb() {
   const client = await pool.connect();
   try {
@@ -97,7 +101,9 @@ app.post('/register', async (req, res) => {
     await pool.query('INSERT INTO users (username, password_hash) VALUES ($1, $2)', [username, hash]);
     res.json({ success: true, message: 'Registrasi berhasil' });
   } catch (err) {
-    if (err.code === '23505') return res.status(400).json({ success: false, message: 'Username sudah terdaftar' });
+    if (err.code === '23505') {
+      return res.status(400).json({ success: false, message: 'Username sudah terdaftar' });
+    }
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
